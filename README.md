@@ -1,2 +1,2 @@
-# habedee
-for aspal
+# habede
+met ultah aspal dingin
