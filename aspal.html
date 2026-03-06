@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Surprise 🎂</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&amp;family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .title-font {
+      font-family: 'Fredoka One', cursive;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 53, 0.5); }
+      50% { box-shadow: 0 0 40px rgba(255, 107, 53, 0.8); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    @keyframes bounce-in {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes confetti-fall {
+      0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    
+    @keyframes basketball-bounce {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      30% { transform: translateY(-100px) scaleY(1); }
+      50% { transform: translateY(0) scaleY(0.8); }
+      60% { transform: translateY(-50px) scaleY(1); }
+      80% { transform: translateY(0) scaleY(0.9); }
+    }
+    
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes slide-up {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes text-glow {
+      0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.5), 0 0 20px rgba(255,107,53,0.5); }
+      50% { text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,107,53,0.8), 0 0 60px rgba(255,107,53,0.5); }
+    }
+    
+    @keyframes star-twinkle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    .shake-animation {
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    .bounce-in {
+      animation: bounce-in 0.6s ease-out forwards;
+    }
+    
+    .basketball-bounce {
+      animation: basketball-bounce 2s ease-in-out infinite;
+    }
+    
+    .spin-slow {
+      animation: spin-slow 20s linear infinite;
+    }
+    
+    .text-glow {
+      animation: text-glow 2s ease-in-out infinite;
+    }
+    
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      animation: confetti-fall 3s linear forwards;
+    }
+    
+    .pin-input {
+      width: 60px;
+      height: 70px;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      border: 3px solid #FF6B35;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    
+    .pin-input:focus {
+      border-color: #FFD700;
+      box-shadow: 0 0 20px rgba(255,215,0,0.5);
+      transform: scale(1.05);
+    }
+    
+    .pin-input.correct {
+      border-color: #00FF00;
+      background: rgba(0,255,0,0.2);
+    }
+    
+    .pin-input.wrong {
+      border-color: #FF0000;
+      background: rgba(255,0,0,0.2);
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    .court-line {
+      position: absolute;
+      background: rgba(255,255,255,0.3);
+    }
+    
+    .basketball {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #FF6B35 0%, #C74B1A 50%, #FF6B35 100%);
+      border-radius: 50%;
+      position: relative;
+      box-shadow: inset -10px -10px 20px rgba(0,0,0,0.3), inset 5px 5px 10px rgba(255,255,255,0.2);
+    }
+    
+    .basketball::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #1a1a2e;
+      transform: translateY(-50%);
+    }
+    
+    .basketball::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #1a1a2e;
+      transform: translateX(-50%);
+    }
+    
+    .hoop {
+      width: 100px;
+      height: 80px;
+      border: 8px solid #FF6B35;
+      border-top: none;
+      border-radius: 0 0 50px 50px;
+      position: relative;
+    }
+    
+    .hoop::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -30px;
+      right: -30px;
+      height: 20px;
+      background: white;
+      border-radius: 5px;
+    }
+    
+    .net {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      right: 10px;
+      height: 60px;
+      background: repeating-linear-gradient(
+        180deg,
+        transparent,
+        transparent 5px,
+        rgba(255,255,255,0.5) 5px,
+        rgba(255,255,255,0.5) 7px
+      );
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div id="app" class="min-h-full w-full"><!-- PIN Screen -->
+   <div id="pin-screen" class="min-h-full w-full bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] flex flex-col items-center justify-center p-6 relative overflow-hidden"><!-- Background decorations -->
+    <div class="absolute top-10 left-10 w-20 h-20 rounded-full bg-orange-500/20 blur-xl"></div>
+    <div class="absolute bottom-20 right-10 w-32 h-32 rounded-full bg-blue-500/20 blur-xl"></div>
+    <div class="absolute top-1/2 left-1/4 w-16 h-16 rounded-full bg-yellow-500/10 blur-lg float-animation"></div><!-- Lock Icon -->
+    <div class="mb-8 bounce-in">
+     <div class="w-24 h-24 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center pulse-glow"><i data-lucide="lock" class="w-12 h-12 text-white"></i>
+     </div>
+    </div><!-- Title -->
+    <h1 class="title-font text-4xl md:text-5xl text-white mb-4 text-center bounce-in" style="animation-delay: 0.2s;">🔐 Masukkan PIN</h1><!-- Clue -->
+    <p class="text-orange-300 text-lg mb-8 text-center bounce-in" style="animation-delay: 0.3s;">💡 Clue: <span class="font-semibold text-yellow-300">"tanggal lahir kamuu"</span></p><!-- PIN Input -->
+    <div class="flex gap-3 mb-6 bounce-in" style="animation-delay: 0.4s;"><input type="text" maxlength="1" class="pin-input" id="pin1" inputmode="numeric" pattern="[0-9]*"> <input type="text" maxlength="1" class="pin-input" id="pin2" inputmode="numeric" pattern="[0-9]*"> <input type="text" maxlength="1" class="pin-input" id="pin3" inputmode="numeric" pattern="[0-9]*"> <input type="text" maxlength="1" class="pin-input" id="pin4" inputmode="numeric" pattern="[0-9]*">
+    </div><!-- Error Message -->
+    <p id="error-msg" class="text-red-400 text-sm mb-4 opacity-0 transition-opacity">PIN salah! Coba lagi ya 😊</p><!-- Submit Button --> <button id="submit-pin" class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-10 rounded-full text-lg transition-all transform hover:scale-105 pulse-glow bounce-in" style="animation-delay: 0.5s;"> <span class="flex items-center gap-2"> <i data-lucide="unlock" class="w-5 h-5"></i> Buka! </span> </button>
+   </div><!-- Success Screen -->
+   <div id="success-screen" class="min-h-full w-full bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] flex-col items-center justify-center p-6 relative overflow-hidden hidden"><!-- Decorations -->
+    <div class="absolute top-5 right-5 text-6xl float-animation">
+     🎉
+    </div>
+    <div class="absolute bottom-10 left-5 text-5xl float-animation" style="animation-delay: 0.5s;">
+     🎊
+    </div><!-- Check Icon -->
+    <div class="mb-6 bounce-in">
+     <div class="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center"><i data-lucide="check" class="w-10 h-10 text-white"></i>
+     </div>
+    </div><!-- Success Message -->
+    <div class="text-center max-w-md mx-auto">
+     <h2 class="title-font text-3xl md:text-4xl text-white mb-6 bounce-in" style="animation-delay: 0.2s;">🎉 Yeeeyyy! 🎉</h2>
+     <p class="text-xl text-orange-300 mb-8 leading-relaxed bounce-in" style="animation-delay: 0.3s;">Kalo ini bisa terbuka berarti aku tau tanggal lahir kamuu yeeeyyy! 🥳</p><!-- Next instruction -->
+     <p class="text-lg text-yellow-300 mb-8 bounce-in" style="animation-delay: 0.4s;">✨ Kalo mau tau sesuatu pilih satu yaaa ✨</p><!-- Buttons container -->
+     <div class="relative flex flex-col items-center gap-4 bounce-in" style="animation-delay: 0.5s;"><button id="btn-mau" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-12 rounded-full text-xl transition-all transform hover:scale-105 shadow-lg" style="min-width: 200px;"> <span class="flex items-center justify-center gap-2"> <i data-lucide="heart" class="w-6 h-6"></i> Mauu </span> </button> <button id="btn-gamau" class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all"> <span class="flex items-center justify-center gap-2"> <i data-lucide="x" class="w-5 h-5"></i> Ga mau tau </span> </button>
+     </div>
+    </div>
+   </div><!-- Birthday Screen -->
+   <div id="birthday-screen" class="min-h-full w-full bg-gradient-to-br from-[#1a1a2e] via-[#0f3460] to-[#1a1a2e] flex-col items-center justify-center p-6 relative overflow-hidden hidden"><!-- Basketball Court Background -->
+    <div class="absolute inset-0 overflow-hidden"><!-- Court -->
+     <div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-orange-900/30 to-transparent"></div><!-- Court lines -->
+     <div class="court-line absolute bottom-1/4 left-1/2 transform -translate-x-1/2 w-40 h-40 border-4 border-white/20 rounded-full"></div>
+     <div class="court-line absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-1 bg-white/20"></div><!-- Floating basketballs -->
+     <div class="absolute top-20 left-10 basketball basketball-bounce" style="width: 40px; height: 40px; animation-delay: 0s;"></div>
+     <div class="absolute top-40 right-20 basketball basketball-bounce" style="width: 30px; height: 30px; animation-delay: 0.5s;"></div>
+     <div class="absolute bottom-40 left-20 basketball basketball-bounce" style="width: 50px; height: 50px; animation-delay: 1s;"></div>
+     <div class="absolute top-1/3 right-10 basketball basketball-bounce" style="width: 35px; height: 35px; animation-delay: 1.5s;"></div><!-- Hoop decoration -->
+     <div class="absolute top-10 left-1/2 transform -translate-x-1/2">
+      <div class="hoop">
+       <div class="net"></div>
+      </div>
+     </div><!-- Stars/sparkles -->
+     <div id="sparkles"></div>
+    </div><!-- Confetti container -->
+    <div id="confetti-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div><!-- Main content -->
+    <div class="relative z-10 text-center max-w-2xl mx-auto"><!-- Big basketball animation -->
+     <div class="mb-8 bounce-in">
+      <div class="basketball mx-auto basketball-bounce" style="width: 100px; height: 100px;"></div>
+     </div><!-- Birthday text -->
+     <div class="bounce-in" style="animation-delay: 0.3s;">
+      <h1 class="title-font text-5xl md:text-7xl text-white mb-4 text-glow">🎂 HAPPY BIRTHDAY! 🎂</h1>
+     </div>
+     <div class="bounce-in" style="animation-delay: 0.5s;">
+      <p class="text-2xl md:text-3xl text-orange-300 mb-2">untuk yang spesial</p>
+     </div>
+     <div class="bounce-in" style="animation-delay: 0.7s;">
+      <h2 id="birthday-name" class="title-font text-4xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 mb-8 text-glow">Azfaril Sabih Dwi Azmiko</h2>
+     </div>
+     <div class="bounce-in" style="animation-delay: 0.9s;">
+      <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-orange-500/30">
+       <p class="text-xl md:text-2xl text-white leading-relaxed mb-4">🏀 Semoga di usia yang baru ini...</p>
+       <p class="text-lg text-orange-200 leading-relaxed mb-4">Kamu selalu bersemangat seperti bola basket yang terus memantul! 🔥</p>
+       <p class="text-lg text-yellow-200 leading-relaxed mb-4">Selalu <span class="font-bold">SCORE</span> dalam setiap impianmu! 🎯</p>
+       <p class="text-lg text-green-200 leading-relaxed mb-4">Dan jadi <span class="font-bold">MVP</span> dalam hidupmu sendiri! 🏆</p>
+       <p class="text-2xl mt-6">🎉🎊🎁🎈🎂</p>
+      </div>
+     </div><!-- Cake emoji animation -->
+     <div class="mt-8 bounce-in" style="animation-delay: 1.1s;">
+      <div class="text-8xl float-animation">
+       🎂
+      </div>
+     </div><!-- Back button --> <button id="btn-back" class="mt-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all transform hover:scale-105 bounce-in" style="animation-delay: 1.3s;"> <span class="flex items-center gap-2"> <i data-lucide="arrow-left" class="w-5 h-5"></i> Kembali </span> </button>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Config
+    const defaultConfig = {
+      recipient_name: 'Azfaril Sabih Dwi Azmiko',
+      background_color: '#1a1a2e',
+      accent_color: '#FF6B35',
+      text_color: '#ffffff'
+    };
+    
+    let config = { ...defaultConfig };
+    let mauButtonScale = 1;
+    let gamauClickCount = 0;
+    
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (newConfig) => {
+          config = { ...defaultConfig, ...newConfig };
+          updateUI();
+        },
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            {
+              get: () => cfg.background_color || defaultConfig.background_color,
+              set: (value) => {
+                cfg.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => cfg.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                cfg.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            },
+            {
+              get: () => cfg.text_color || defaultConfig.text_color,
+              set: (value) => {
+                cfg.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ['recipient_name', cfg.recipient_name || defaultConfig.recipient_name]
+        ])
+      });
+    }
+    
+    function updateUI() {
+      const nameEl = document.getElementById('birthday-name');
+      if (nameEl) {
+        nameEl.textContent = config.recipient_name || defaultConfig.recipient_name;
+      }
+    }
+    
+    // PIN Logic
+    const correctPin = '2104';
+    const pinInputs = [
+      document.getElementById('pin1'),
+      document.getElementById('pin2'),
+      document.getElementById('pin3'),
+      document.getElementById('pin4')
+    ];
+    
+    // Auto-focus and move between inputs
+    pinInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const value = e.target.value;
+        
+        // Only allow numbers
+        e.target.value = value.replace(/[^0-9]/g, '');
+        
+        if (e.target.value && index < 3) {
+          pinInputs[index + 1].focus();
+        }
+      });
+      
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          pinInputs[index - 1].focus();
+        }
+      });
+    });
+    
+    // Submit PIN
+    document.getElementById('submit-pin').addEventListener('click', checkPin);
+    
+    // Also check on Enter key
+    pinInputs.forEach(input => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          checkPin();
+        }
+      });
+    });
+    
+    function checkPin() {
+      const enteredPin = pinInputs.map(input => input.value).join('');
+      const errorMsg = document.getElementById('error-msg');
+      
+      if (enteredPin === correctPin) {
+        // Correct PIN
+        pinInputs.forEach(input => input.classList.add('correct'));
+        errorMsg.style.opacity = '0';
+        
+        setTimeout(() => {
+          document.getElementById('pin-screen').classList.add('hidden');
+          document.getElementById('pin-screen').style.display = 'none';
+          document.getElementById('success-screen').classList.remove('hidden');
+          document.getElementById('success-screen').style.display = 'flex';
+          lucide.createIcons();
+        }, 500);
+      } else {
+        // Wrong PIN
+        pinInputs.forEach(input => {
+          input.classList.add('wrong');
+          input.value = '';
+        });
+        errorMsg.style.opacity = '1';
+        pinInputs[0].focus();
+        
+        setTimeout(() => {
+          pinInputs.forEach(input => input.classList.remove('wrong'));
+        }, 500);
+      }
+    }
+    
+    // Button Logic
+    document.getElementById('btn-mau').addEventListener('click', () => {
+      document.getElementById('success-screen').classList.add('hidden');
+      document.getElementById('success-screen').style.display = 'none';
+      document.getElementById('birthday-screen').classList.remove('hidden');
+      document.getElementById('birthday-screen').style.display = 'flex';
+      
+      // Start confetti
+      startConfetti();
+      createSparkles();
+      lucide.createIcons();
+    });
+    
+    document.getElementById('btn-gamau').addEventListener('click', () => {
+      gamauClickCount++;
+      const btnMau = document.getElementById('btn-mau');
+      const btnGamau = document.getElementById('btn-gamau');
+      
+      // Increase mau button size
+      mauButtonScale += 0.3;
+      btnMau.style.transform = `scale(${mauButtonScale})`;
+      btnMau.style.zIndex = '10';
+      
+      // Shake animation
+      btnMau.classList.add('shake-animation');
+      setTimeout(() => btnMau.classList.remove('shake-animation'), 500);
+      
+      // After several clicks, disable gamau button
+      if (gamauClickCount >= 5) {
+        btnGamau.style.opacity = '0.3';
+        btnGamau.style.pointerEvents = 'none';
+        btnGamau.style.transform = 'scale(0.5)';
+      }
+      
+      // Make mau button cover screen eventually
+      if (mauButtonScale > 3) {
+        btnMau.style.position = 'fixed';
+        btnMau.style.top = '50%';
+        btnMau.style.left = '50%';
+        btnMau.style.transform = `translate(-50%, -50%) scale(${mauButtonScale})`;
+      }
+    });
+    
+    document.getElementById('btn-back').addEventListener('click', () => {
+      document.getElementById('birthday-screen').classList.add('hidden');
+      document.getElementById('birthday-screen').style.display = 'none';
+      document.getElementById('success-screen').classList.remove('hidden');
+      document.getElementById('success-screen').style.display = 'flex';
+      
+      // Reset button states
+      mauButtonScale = 1;
+      gamauClickCount = 0;
+      const btnMau = document.getElementById('btn-mau');
+      const btnGamau = document.getElementById('btn-gamau');
+      btnMau.style.transform = 'scale(1)';
+      btnMau.style.position = 'relative';
+      btnMau.style.top = 'auto';
+      btnMau.style.left = 'auto';
+      btnGamau.style.opacity = '1';
+      btnGamau.style.pointerEvents = 'auto';
+      btnGamau.style.transform = 'scale(1)';
+      
+      lucide.createIcons();
+    });
+    
+    // Confetti function
+    function startConfetti() {
+      const container = document.getElementById('confetti-container');
+      container.innerHTML = '';
+      
+      const colors = ['#FF6B35', '#FFD700', '#00FF00', '#FF69B4', '#00CED1', '#FF4500', '#9400D3'];
+      
+      for (let i = 0; i < 100; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+          confetti.style.animationDelay = Math.random() * 0.5 + 's';
+          
+          // Random shapes
+          const shapes = ['50%', '0%', '20%'];
+          confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+          confetti.style.width = (Math.random() * 10 + 5) + 'px';
+          confetti.style.height = (Math.random() * 10 + 5) + 'px';
+          
+          container.appendChild(confetti);
+          
+          // Remove after animation
+          setTimeout(() => confetti.remove(), 5000);
+        }, i * 50);
+      }
+      
+      // Continuous confetti
+      setInterval(() => {
+        if (document.getElementById('birthday-screen').style.display !== 'none') {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+          confetti.style.width = (Math.random() * 10 + 5) + 'px';
+          confetti.style.height = (Math.random() * 10 + 5) + 'px';
+          confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
+          container.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 5000);
+        }
+      }, 200);
+    }
+    
+    // Create sparkles
+    function createSparkles() {
+      const container = document.getElementById('sparkles');
+      container.innerHTML = '';
+      
+      for (let i = 0; i < 20; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.innerHTML = '✨';
+        sparkle.style.position = 'absolute';
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = Math.random() * 100 + '%';
+        sparkle.style.fontSize = (Math.random() * 20 + 10) + 'px';
+        sparkle.style.animation = `star-twinkle ${Math.random() * 2 + 1}s ease-in-out infinite`;
+        sparkle.style.animationDelay = Math.random() * 2 + 's';
+        container.appendChild(sparkle);
+      }
+    }
+    
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Focus first PIN input
+    document.getElementById('pin1').focus();
+    
+    // Initial UI update
+    updateUI();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d7fbac160a5ce71',t:'MTc3Mjc4MzAwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
